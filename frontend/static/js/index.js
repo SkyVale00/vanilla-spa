@@ -1,4 +1,8 @@
 // client side javascript
+import Dashboard from './views/Dashboard.js';
+import Posts from './views/Posts.js';
+import Settings from './views/Settings.js';
+import FourOFour from './views/404.js';
 
 // this function will prevent the page from refreshing each time a nav link is clicked
 const navigateTo = url => {
@@ -9,10 +13,10 @@ const navigateTo = url => {
 // async function loads required settings before the page itself is loaded
 const router = async () => {
     const routes = [
-        { path: "/", view: () => console.log("Viewing the Dashboard") },
-        { path: "/posts", view: () => console.log("Viewing the Posts") },
-        { path: "/settings", view: () => console.log("Viewing the Settings") },
-        { path: "/404", view: () => console.log("Error 404 Not Found") },
+        { path: "/", view: Dashboard },
+        { path: "/posts", view: Posts },
+        { path: "/settings", view: Settings },
+        { path: "/404", view: FourOFour },
     ];
 
     // Test each route for a potential match
@@ -33,6 +37,12 @@ const router = async () => {
             isMatch: true
         };
     }
+
+    // creates a new instance of the view at the route
+    const view = new match.route.view();
+
+    // get the html from the selected view and inject it into the div #app
+    document.querySelector("#app").innerHTML = await view.getHtml();
 
     console.log(match.route.view());
 
