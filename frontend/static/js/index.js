@@ -1,5 +1,11 @@
 // client side javascript
 
+// this function will prevent the page from refreshing each time a nav link is clicked
+const navigateTo = url => {
+    history.pushState(null, null, url);
+    router();
+}
+
 // async function loads required settings before the page itself is loaded
 const router = async () => {
     const routes = [
@@ -32,7 +38,20 @@ const router = async () => {
 
 };
 
+// if the user navigates using the back-arrow, it will run the router and it wont break the application
+window.addEventListener("popstate", router);
+
 // once the DOM has loaded, the router function can run and load the page
 document.addEventListener("DOMContentLoaded", () => {
+
+    // if the user clicks on a nav link, it will call the navigateTo function
+    document.body.addEventListener("click", e => {
+        // *note that there must be a 'data-link' attribute on the nav-a in the html for this to work
+        if (e.target.matches("[data-link]")) {
+            e.preventDefault();
+            navigateTo(e.target.href);
+        }
+    })
+
     router();
 });
